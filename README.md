@@ -2,7 +2,7 @@
 
 A modern, responsive pet adoption website built with Vue.js 3 and Vite. This project demonstrates key Vue.js concepts through a real-world application that connects loving families with pets in need of homes.
 
-![PetVue Demo](https://via.placeholder.com/800x400/ff6b35/ffffff?text=PetVue+Adoption+App)
+![PetVue Demo](https://chrisminnick.github.io/pet-vue)
 
 ## 📚 Learning Objectives
 
