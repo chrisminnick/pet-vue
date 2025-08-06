@@ -81,6 +81,33 @@ This project is designed to teach Vue.js progressively through the following mod
 4. **Open your browser**
    Navigate to `http://localhost:5173` (or the port shown in terminal)
 
+## 🚀 Deployment
+
+This app is configured for deployment to GitHub Pages at `https://chrisminnick.github.io/pet-vue/`.
+
+### Automatic Deployment
+
+The app automatically deploys to GitHub Pages when you push to the main branch using GitHub Actions.
+
+### Manual Deployment
+
+1. **Install gh-pages dependency**
+
+   ```bash
+   npm install
+   ```
+
+2. **Build and deploy**
+   ```bash
+   npm run deploy
+   ```
+
+### Configuration for GitHub Pages
+
+- **Base path** is set to `/pet-vue/` in `vite.config.js`
+- **Router** uses `import.meta.env.BASE_URL` for correct path handling
+- **GitHub Actions** workflow automatically builds and deploys on push to main
+
 ### Available Scripts
 
 | Command           | Description                              |
@@ -88,6 +115,7 @@ This project is designed to teach Vue.js progressively through the following mod
 | `npm run dev`     | Start development server with hot reload |
 | `npm run build`   | Build for production                     |
 | `npm run preview` | Preview production build locally         |
+| `npm run deploy`  | Build and deploy to GitHub Pages         |
 | `npm run format`  | Format code with Prettier                |
 
 ## 📁 Project Structure
