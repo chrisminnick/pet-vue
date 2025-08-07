@@ -107,6 +107,8 @@ The app automatically deploys to GitHub Pages when you push to the main branch u
 - **Base path** is set to `/pet-vue/` in `vite.config.js`
 - **Router** uses `import.meta.env.BASE_URL` for correct path handling
 - **GitHub Actions** workflow automatically builds and deploys on push to main
+- **SPA fallback** configured with `404.html` to handle page refreshes on any route
+- **Route handling** script in `index.html` processes redirected URLs correctly
 
 ### Available Scripts
 
@@ -117,6 +119,17 @@ The app automatically deploys to GitHub Pages when you push to the main branch u
 | `npm run preview` | Preview production build locally         |
 | `npm run deploy`  | Build and deploy to GitHub Pages         |
 | `npm run format`  | Format code with Prettier                |
+
+### SPA Routing on GitHub Pages
+
+GitHub Pages doesn't natively support Single Page Applications (SPAs) with client-side routing. When a user refreshes the page on a route like `/about`, GitHub Pages tries to find a physical file at that path, resulting in a 404 error.
+
+**Solution implemented:**
+- `public/404.html` - Catches 404 errors and redirects to the main app with route information
+- `index.html` - Contains a script that processes the redirected route and updates the browser history
+- This allows Vue Router to handle the routing correctly after the redirect
+
+This means you can now refresh the page on any route (like `/about` or `/pets/1`) and it will work correctly!
 
 ## 📁 Project Structure
 
