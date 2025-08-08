@@ -125,6 +125,7 @@ The app automatically deploys to GitHub Pages when you push to the main branch u
 GitHub Pages doesn't natively support Single Page Applications (SPAs) with client-side routing. When a user refreshes the page on a route like `/about`, GitHub Pages tries to find a physical file at that path, resulting in a 404 error.
 
 **Solution implemented:**
+
 - `public/404.html` - Catches 404 errors and redirects to the main app with route information
 - `index.html` - Contains a script that processes the redirected route and updates the browser history
 - This allows Vue Router to handle the routing correctly after the redirect
