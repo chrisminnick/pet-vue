@@ -37,17 +37,17 @@ This project is designed to teach Vue.js progressively through the following mod
 
 - **Vue 3 Composition API** for modern reactive programming
 - **Vue Router** for seamless navigation
-- **Responsive CSS Grid** layouts
-- **CSS Custom Properties** for consistent theming
+- **Bootstrap 5** for responsive layouts and components
+- **Minimal custom CSS** focusing on Vue concepts
 - **Component-based architecture**
-- **Scoped styling** for maintainable CSS
+- **Educational-focused styling** to emphasize Vue learning
 
 ## 🛠️ Tech Stack
 
 - **Vue.js 3** - Progressive JavaScript framework
 - **Vite** - Fast build tool and development server
 - **Vue Router** - Official router for Vue.js
-- **CSS3** - Modern styling with Grid and Flexbox
+- **Bootstrap 5** - CSS framework for responsive design
 - **ES6+** - Modern JavaScript features
 
 ## 🚀 Quick Start

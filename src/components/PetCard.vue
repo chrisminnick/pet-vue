@@ -1,46 +1,65 @@
 <template>
   <div
-    class="pet-card"
+    class="card pet-card h-100"
     @click="$router.push({ name: 'PetDetail', params: { id: pet.id } })"
-    :class="{ adopted: pet.adopted }"
   >
-    <div class="card-image">
-      <img :src="pet.image" :alt="pet.name" />
+    <div class="position-relative">
+      <img :src="pet.image" :alt="pet.name" class="card-img-top pet-image" />
+
+      <!-- Adopted Overlay -->
       <div v-if="pet.adopted" class="adopted-overlay">
-        <span class="adopted-badge">✓ ADOPTED</span>
+        <div class="text-center">
+          <div class="fs-2 text-success">✓</div>
+          <div class="fw-bold">ADOPTED</div>
+        </div>
       </div>
-      <div class="energy-badge" :class="`energy-${pet.energy.toLowerCase()}`">
+
+      <!-- Energy Badge -->
+      <span
+        class="badge position-absolute top-0 end-0 m-2 energy-badge"
+        :class="{
+          'bg-success': pet.energy === 'Low',
+          'bg-warning': pet.energy === 'Medium',
+          'bg-primary': pet.energy === 'High',
+        }"
+      >
         {{ pet.energy }} Energy
-      </div>
+      </span>
     </div>
 
-    <div class="card-content">
-      <div class="pet-header">
-        <h3 class="pet-name">{{ pet.name }}</h3>
-        <span class="pet-age">{{ pet.age }} {{ pet.age === 1 ? 'yr' : 'yrs' }}</span>
+    <div class="card-body d-flex flex-column">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="card-title mb-0">{{ pet.name }}</h5>
+        <span class="badge bg-secondary">{{ pet.age }} {{ pet.age === 1 ? 'yr' : 'yrs' }}</span>
       </div>
 
-      <div class="pet-info">
-        <p class="pet-breed">{{ pet.breed }} • {{ pet.gender }}</p>
-        <p class="pet-size">{{ pet.size }} {{ pet.type }}</p>
-      </div>
+      <p class="card-text text-muted mb-2">{{ pet.breed }} • {{ pet.gender }}</p>
+      <p class="card-text small mb-3">{{ pet.size }} {{ pet.type }}</p>
 
-      <div class="pet-tags">
-        <span class="tag" v-for="trait in pet.goodWith.slice(0, 2)" :key="trait">
+      <div class="mb-3">
+        <span
+          v-for="trait in pet.goodWith.slice(0, 2)"
+          :key="trait"
+          class="badge bg-light text-dark me-1 mb-1"
+        >
           Good with {{ trait }}
         </span>
       </div>
 
-      <div class="pet-location">
-        <span class="location-icon">📍</span>
-        {{ pet.location }}
-      </div>
-    </div>
+      <div class="mt-auto">
+        <div class="d-flex align-items-center text-muted small mb-2">
+          <span>📍</span>
+          <span class="ms-1">{{ pet.location }}</span>
+        </div>
 
-    <div class="card-footer">
-      <button class="btn btn-primary" :disabled="pet.adopted">
-        {{ pet.adopted ? 'Already Adopted' : 'Learn More' }}
-      </button>
+        <button
+          class="btn btn-primary w-100"
+          :class="{ 'btn-secondary': pet.adopted }"
+          :disabled="pet.adopted"
+        >
+          {{ pet.adopted ? 'Already Adopted' : 'Learn More' }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -57,43 +76,23 @@ const props = defineProps({
 </script>
 
 <style scoped>
+/* Bootstrap handles most styling, minimal custom CSS needed */
 .pet-card {
-  background: var(--background-white);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-light);
-  overflow: hidden;
   cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  transition: transform 0.2s;
 }
 
-.pet-card:hover:not(.adopted) {
-  box-shadow: var(--shadow-hover);
-  transform: translateY(-4px);
+.pet-card:hover {
+  transform: translateY(-2px);
 }
 
 .pet-card.adopted {
   opacity: 0.7;
-  cursor: default;
 }
 
-.card-image {
-  position: relative;
-  aspect-ratio: 4/3;
-  overflow: hidden;
-}
-
-.card-image img {
-  width: 100%;
-  height: 100%;
+.pet-image {
+  height: 200px;
   object-fit: cover;
-  transition: var(--transition);
-}
-
-.pet-card:hover:not(.adopted) .card-image img {
-  transform: scale(1.05);
 }
 
 .adopted-overlay {
@@ -102,133 +101,14 @@ const props = defineProps({
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.adopted-badge {
-  background: var(--success-color);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
-  font-weight: 700;
-  font-size: 0.9rem;
-}
-
 .energy-badge {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.energy-low {
-  background: var(--success-color);
-  color: white;
-}
-
-.energy-medium {
-  background: var(--warning-color);
-  color: var(--text-dark);
-}
-
-.energy-high {
-  background: var(--primary-color);
-  color: white;
-}
-
-.card-content {
-  padding: 1.25rem;
-  flex-grow: 1;
-}
-
-.pet-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
-.pet-name {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-dark);
-  margin: 0;
-}
-
-.pet-age {
-  background: var(--secondary-color);
-  color: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 15px;
   font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.pet-info {
-  margin-bottom: 1rem;
-}
-
-.pet-breed,
-.pet-size {
-  margin: 0 0 0.25rem 0;
-  font-size: 0.9rem;
-  color: var(--text-medium);
-}
-
-.pet-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.tag {
-  background: var(--background-light);
-  color: var(--text-medium);
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.7rem;
-  font-weight: 500;
-}
-
-.pet-location {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.8rem;
-  color: var(--text-light);
-}
-
-.location-icon {
-  font-size: 0.7rem;
-}
-
-.card-footer {
-  padding: 0 1.25rem 1.25rem;
-}
-
-.btn {
-  width: 100%;
-  border: none;
-  cursor: pointer;
-}
-
-.btn:disabled {
-  background-color: var(--text-light);
-  cursor: not-allowed;
-  transform: none;
-}
-
-.btn:disabled:hover {
-  transform: none;
-  box-shadow: var(--shadow-light);
 }
 </style>
