@@ -1,114 +1,96 @@
 <template>
-  <div
-    class="card pet-card h-100"
-    @click="$router.push({ name: 'PetDetail', params: { id: pet.id } })"
-  >
-    <div class="position-relative">
-      <img :src="pet.image" :alt="pet.name" class="card-img-top pet-image" />
-
-      <!-- Adopted Overlay -->
-      <div v-if="pet.adopted" class="adopted-overlay">
-        <div class="text-center">
-          <div class="fs-2 text-success">✓</div>
-          <div class="fw-bold">ADOPTED</div>
+  <div class="col-md-6 col-lg-4">
+    <div
+      class="card h-100"
+      @click="handleCardClick"
+    >
+        <img
+          :src="pet.image"
+          :alt="pet.name"
+          class="card-img-top"
+          style="height: 200px; object-fit: cover"
+        />
+        <div v-if="pet.adopted" class="adoption-overlay">
+          <div class="adoption-message">
+            <h6 class="fw-bold mb-1">ADOPTED!</h6>
+            <small>Found their forever home</small>
+          </div>
         </div>
-      </div>
-
-      <!-- Energy Badge -->
-      <span
-        class="badge position-absolute top-0 end-0 m-2 energy-badge"
-        :class="{
-          'bg-success': pet.energy === 'Low',
-          'bg-warning': pet.energy === 'Medium',
-          'bg-primary': pet.energy === 'High',
-        }"
-      >
-        {{ pet.energy }} Energy
-      </span>
-    </div>
-
-    <div class="card-body d-flex flex-column">
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <h5 class="card-title mb-0">{{ pet.name }}</h5>
-        <span class="badge bg-secondary">{{ pet.age }} {{ pet.age === 1 ? 'yr' : 'yrs' }}</span>
-      </div>
-
-      <p class="card-text text-muted mb-2">{{ pet.breed }} • {{ pet.gender }}</p>
-      <p class="card-text small mb-3">{{ pet.size }} {{ pet.type }}</p>
-
-      <div class="mb-3">
         <span
-          v-for="trait in pet.goodWith.slice(0, 2)"
-          :key="trait"
-          class="badge bg-light text-dark me-1 mb-1"
+          class="badge position-absolute top-0 end-0 m-2"
+          :class="getEnergyBadgeClass(pet.energy)"
         >
-          Good with {{ trait }}
+          {{ pet.energy }}
         </span>
+        <div class="card-body">
+          <h5 class="card-title">{{ pet.name }}</h5>
+          <p class="card-text">{{ pet.breed }} • {{ pet.gender }}</p>
+          <p class="card-text">{{ pet.size }} {{ pet.type }}</p>
+          <div v-if="showHealthStatus(pet)" class="mb-2">
+            <small class="text-muted d-block mb-1">Health Status:</small>
+            <div class="d-flex gap-1 flex-wrap">
+              <span
+                v-if="pet.vaccinated"
+                class="badge bg-success"
+                title="Vaccinated"
+              >
+                Vaccinated
+              </span>
+              <span
+                v-if="pet.spayed || pet.neutered"
+                class="badge bg-info"
+                :title="pet.spayed ? 'Spayed' : 'Neutered'"
+              >
+                {{ pet.spayed ? 'Spayed' : 'Neutered' }}
+              </span>
+            </div>
+          </div>
       </div>
-
-      <div class="mt-auto">
-        <div class="d-flex align-items-center text-muted small mb-2">
-          <span>📍</span>
-          <span class="ms-1">{{ pet.location }}</span>
-        </div>
-
-        <button
-          class="btn btn-primary w-100"
-          :class="{ 'btn-secondary': pet.adopted }"
-          :disabled="pet.adopted"
-        >
-          {{ pet.adopted ? 'Already Adopted' : 'Learn More' }}
-        </button>
       </div>
-    </div>
-  </div>
+      </div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
-
+const emit = defineEmits(['pet-clicked']);
+const handleCardClick = () => {
+  emit('pet-clicked', props.pet);
+};
 const props = defineProps({
   pet: {
     type: Object,
     required: true,
   },
-})
+});
+// Energy badge method
+const getEnergyBadgeClass = (energy) => {
+  const classes = {
+    'High': 'bg-danger',
+    'Medium': 'bg-warning text-dark',
+    'Low': 'bg-success'
+  };
+  return classes[energy] || 'bg-secondary';
+};
+
+// Health status method
+const showHealthStatus = (pet) => {
+  return pet.vaccinated || pet.spayed || pet.neutered;
+};
+
 </script>
-
 <style scoped>
-/* Bootstrap handles most styling, minimal custom CSS needed */
-.pet-card {
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.pet-card:hover {
-  transform: translateY(-2px);
-}
-
-.pet-card.adopted {
-  opacity: 0.7;
-}
-
-.pet-image {
-  height: 200px;
-  object-fit: cover;
-}
-
-.adopted-overlay {
+/* Adoption Overlay */
+.adoption-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
+  background: rgba(40, 167, 69, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: white;
+  text-align: center;
+  border-radius: 0.375rem 0.375rem 0 0;
 }
-
-.energy-badge {
-  font-size: 0.75rem;
-}
-</style>
+</style scoped>

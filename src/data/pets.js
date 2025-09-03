@@ -107,4 +107,4 @@ export const pets = [
     vaccinated: true,
     neutered: true,
   },
-]
+];
